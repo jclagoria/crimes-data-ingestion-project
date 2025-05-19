@@ -23,9 +23,9 @@ This project ingests and processes public crime data from the City of Chicago, s
 ## Tech Stack
 
 - Java 21
-- Spring Boot (WebFlux, Data MongoDB Reactive, JPA)
+- Spring Boot (WebFlux, Data MongoDB Reactive, Data R2DBC)
 - MongoDB for raw ingestion
-- PostgreSQL + PostGIS for normalized data
+- PPostgreSQL (with R2DBC) + PostGIS for normalized data
 - OpenCSV (CSV streaming)
 - GraphQL Java Kickstart
 
@@ -51,13 +51,14 @@ app:
     schedule: "0 0/15 * * * *"  # Every 15 minutes
 
 spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/crimes
+    username: crimes_user
+    password: secret
+
   data:
     mongodb:
       uri: mongodb://localhost:27017/chicago-crimes
-  datasource:
-    url: jdbc:postgresql://localhost:5432/crimes
-    username: crimes_user
-    password: secret
 ```
 
 ## Setup

@@ -8,6 +8,7 @@
 | - Initialize Spring Boot project with WebFlux, MongoDB, PostgreSQL, Scheduler.
   - Setup basic directory structure based on Clean Architecture.
   - Configure CI/CD pipeline (if applicable).
+  - Configure R2DBC connection and manually manage schema.
 
 | M2 - MongoDB Raw Ingestion Pipeline
 | - Implement `CsvCrimeFileReaderAdapter` with OpenCSV.
@@ -17,7 +18,8 @@
 
 | M3 - PostgreSQL Normalization
 | - Implement lookup table initialization (e.g., primary types, FBI codes).
-  - Implement `SyncNormalizedDataUseCase` for transforming and inserting clean data.
+  - Implement `SyncNormalizedDataUseCase` for transforming and inserting clean data, 
+    dapt `SyncNormalizedDataUseCase` to use R2dbcEntityTemplate or ReactiveCrudRepository.
   - Maintain `postgres_synced` flag in MongoDB.
 
 | M4 - Reactive REST & GraphQL APIs
@@ -32,6 +34,7 @@
 
 | M6 - Testing & Hardening
 | - Add unit + integration tests (with Testcontainers for DBs).
+  - Ensure all database tests use embedded R2DBC-compatible database or Testcontainers with reactive support.
   - Validate large file handling (~1.8GB).
   - Handle ingestion failures and retries.
 

@@ -7,12 +7,12 @@
 - Expose reactive and non-blocking REST and GraphQL endpoints for querying data.
 - Apply Hexagonal Architecture and SOLID design principles throughout.
 - Handle large file size efficiently (1.8GB+).
-- Store filtered/query-ready data in a relational database (e.g., PostgreSQL).
+- Store filtered/query-ready data in a reactive relational database (PostgreSQL with R2DBC).
 
 *Should Have*
 - Store raw unfiltered data in a document database (e.g., MongoDB).
 - Background job scheduling using Spring Scheduler.
-- Efficient deduplication and tracking mechanism to detect new vs existing rows.
+- Efficient deduplication and tracking mechanism using reactive queries to detect new vs existing rows.
 - Full-text search across all fields in the initial MVP.
 
 *Could Have*
@@ -45,9 +45,9 @@ The ingestion process is split into two phases for robustness and replayability:
    - On successful ingestion, move the file to `/archive/` folder with timestamped name.
 
 2. **Normalization & Insertion Phase (PostgreSQL)**:
-   - Query MongoDB for records where `postgres_synced = false`.
+   - Use reactive query to fetch unsynced records from MongoDB.
    - Normalize fields into lookup tables (e.g., `primary_types`, `descriptions`, `fbi_codes`).
-   - Insert normalized data into the `crime_data` table.
+   - Insert normalized data using reactive PostgreSQL repositories or R2dbcEntityTemplate.
    - Mark those MongoDB documents as `postgres_synced = true`.
 
 === PlantUML: Ingestion Flow

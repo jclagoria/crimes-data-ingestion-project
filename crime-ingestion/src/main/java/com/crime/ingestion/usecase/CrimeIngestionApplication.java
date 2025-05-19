@@ -1,4 +1,4 @@
-package com.crime.ingestion.service;
+package com.crime.ingestion.usecase;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

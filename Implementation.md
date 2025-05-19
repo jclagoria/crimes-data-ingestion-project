@@ -6,7 +6,7 @@ Technologies:
 - Java 21
 - Spring Boot (Reactive) with WebFlux
 - Spring Data MongoDB Reactive (raw ingestion)
-- Spring Data JPA (PostgreSQL with PostGIS)
+- Spring Data R2DBC (Reactive PostgreSQL with PostGIS)
 - Spring Scheduler (cron-based background polling)
 - OpenCSV (for efficient line-by-line CSV reading)
 - GraphQL Java Kickstart (GraphQL endpoint)
@@ -69,7 +69,7 @@ Indexes:
 
 
 === PostgreSQL Normalized Schema
-
+```sql
 CREATE TABLE primary_types (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL
@@ -121,6 +121,7 @@ CREATE TABLE crime_data (
     location GEOGRAPHY(Point, 4326),
     ingested_at TIMESTAMPTZ DEFAULT NOW()
 );
+```
 
 Indexes:
 
@@ -129,6 +130,7 @@ Indexes:
 - Full-text: GIN (to_tsvector('english', block))
 
 - Geo: GIST (location) using PostGIS
+
 
 === Ingestion Flow
 
@@ -183,13 +185,14 @@ app:
     schedule: "0 0/15 * * * *"  # Every 15 minutes
 
 spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/crimes
+    username: crimes_user
+    password: secret
+
   data:
     mongodb:
       uri: mongodb://localhost:27017/chicago-crimes
-  datasource:
-    url: jdbc:postgresql://localhost:5432/crimes
-    username: crimes_user
-    password: secret
 
 ```
 This implementation ensures:

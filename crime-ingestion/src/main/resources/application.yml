@@ -1,3 +1,44 @@
 spring:
   application:
     name: crime-ingestion
+
+  data:
+    mongodb:
+      uri: mongodb+srv://USER_NAME:PASSWORD_USERNAME@USRI_OF_HOST/?retryWrites=true&w=majority&appName=Cluster0
+      database: NAME_DATABASE
+  # R2DBC PostgreSQL (normalized store)
+  r2dbc:
+    url: r2dbc:postgresql://URI_OF_HOST:PORT/NAME_DATABASE
+    username: USER_NAME
+    password: PASSWORD_USERNAME
+
+  # Scheduler pool
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+  main:
+    allow-bean-definition-overriding: true
+
+  # Hibernate/PostGIS dialect for any JPA use
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
+
+# File-polling schedule (cron every 15 minutes)
+app:
+  ingestion:
+    cron: "0 0/15 * * * *"
+    input-path: /data/crimes/incoming
+    archive-path: /data/crimes/archive
+
+logging:
+  level:
+    root: INFO
+    com.example.crimeapp: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
+  file:
+    path: ${LOG_FILE_PATH:./logs}
