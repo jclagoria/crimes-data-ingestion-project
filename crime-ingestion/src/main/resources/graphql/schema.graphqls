@@ -1,0 +1,5 @@
+# src/main/resources/graphql/schema.graphqls
+
+type Query {
+  _dummy: String
+}
